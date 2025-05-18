@@ -28,11 +28,11 @@ import {addUserToInboxes} from '../../services/UserServices';
 
 // SCHEMA
 const initialValues = {
-  first_name: 'John',
-  last_name: 'Doe',
-  email: 'test@gmail.com',
-  password: 'Admin@1234',
-  password_confirmation: 'Admin@1234',
+  first_name: '',
+  last_name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
 };
 
 const SignUpScreen = ({navigation}) => {
