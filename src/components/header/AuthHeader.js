@@ -39,7 +39,7 @@ const AuthHeader = ({back = false, titleSize = 25}) => {
             fFamily="bold"
             size={titleSize}
             textAlign="center">
-            QUICK NOTES
+            Mini chat/note
           </Typography>
         </View>
       </Flex>

@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import {CommonActions} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 
 import {COLORS} from '../../globalStyle/Theme.js';
 
@@ -10,8 +12,12 @@ import ScaledView from '../../animations/ScaledView';
 
 // API
 import Typography from '../../atomComponents/Typography.js';
+import {setUser} from '../../redux/slices/appSlice.js';
+import {getUser} from '../../services/UserServices.js';
+import {showMessage} from '../../utils/index.js';
 
 const SplashScreen = ({navigation}) => {
+  const dispatch = useDispatch();
   useEffect(() => {
     // CHECK FOR USER
     checkUser();
@@ -19,22 +25,47 @@ const SplashScreen = ({navigation}) => {
 
   const checkUser = async () => {
     try {
-      const unsubscribe = auth().onAuthStateChanged(user => {
-        if (user) {
-          // User is logged in, go to Home/Main screen
-          navigation.replace('MainStack'); // Replace with your main app screen
+      const unsubscribe = auth().onAuthStateChanged(async user => {
+        if (user?._user) {
+          const userSnapShot = await getUser();
+
+          if (!userSnapShot) {
+            showMessage({
+              type: 'danger',
+              message: 'User Not Found!',
+            });
+            goToLogin();
+            return;
+          }
+
+          dispatch(setUser(userSnapShot));
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{name: 'MainStack'}],
+            }),
+          );
         } else {
           // No user is logged in, go to Login screen
-          navigation.replace('LoginScreen');
+          goToLogin();
         }
       });
 
       // Optionally clean up the listener
       return () => unsubscribe();
     } catch (error) {
-      console.log('SplashScreen ~ checkUser error:', error);
-      navigation.replace('LoginScreen');
+      goToLogin();
     }
+  };
+
+  const goToLogin = () => {
+    navigation.replace('LoginScreen');
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{name: 'Login'}],
+    //   }),
+    // );
   };
 
   return (
@@ -46,8 +77,8 @@ const SplashScreen = ({navigation}) => {
         backgroundColor: COLORS.primary,
       }}>
       <ScaledView duration={1500}>
-        <Typography color={COLORS.white100} fFamily="bold" size={42}>
-          QUICK NOTES
+        <Typography color={COLORS.white100} fFamily="bold" size={34}>
+          MINI CHAT / NOTE
         </Typography>
       </ScaledView>
     </Flex>

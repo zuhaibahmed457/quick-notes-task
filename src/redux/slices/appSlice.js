@@ -14,6 +14,7 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
+      delete action.payload.createdAt;
       state.user = action.payload;
       state.isLogged = true;
     },

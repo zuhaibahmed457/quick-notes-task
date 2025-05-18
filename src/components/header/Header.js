@@ -1,6 +1,6 @@
 import React, {memo, useEffect} from 'react';
 import {View, StyleSheet, Platform, TouchableOpacity} from 'react-native';
-import {IconButton} from 'react-native-paper';
+import {Avatar, IconButton} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
 
 import {COLORS} from '../../globalStyle/Theme';
@@ -11,6 +11,7 @@ import Flex from '../../atomComponents/Flex';
 import Sizer from '../../helpers/Sizer';
 import Icon from '../../helpers/Icon';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 const Header = ({
   title = '',
@@ -19,12 +20,14 @@ const Header = ({
   chat = false,
   search = false,
   eclipse = false,
+  home = false,
   addProject = false,
   logout = false,
   addPress = () => {},
   bgColor = undefined,
 }) => {
   const navigation = useNavigation();
+  const {user} = useSelector(state => state.app);
   const handleLogout = async () => {
     try {
       await auth().signOut();
@@ -36,33 +39,55 @@ const Header = ({
   return (
     <View style={[styles.headerWrapper, bgColor && {backgroundColor: bgColor}]}>
       <Flex algItems={'center'} flexStyle={{zIndex: 2}}>
-        <View style={styles.flex1}>
-          {left && (
-            <TouchableOpacity onPress={() => backPress()}>
-              <Icon
-                name={'arrow-back-circle-outline'}
-                iconFamily={'Ionicons'}
+        {home ? (
+          <View style={styles.profileWrapper}>
+            <Avatar.Image
+              source={{uri: user?.profile_image}}
+              style={{backgroundColor: COLORS.grey100}}
+              size={44}
+            />
+            <View>
+              <Typography color={COLORS.secondary} fFamily="semiBold" size={10}>
+                Welcome
+              </Typography>
+              <Typography color={COLORS.white100} fFamily="semiBold" size={14}>
+                {user?.firstName} {user?.lastName}
+                {/* WE ALSO USE DISPLAY NAME. */}
+              </Typography>
+            </View>
+          </View>
+        ) : (
+          <>
+            <View style={styles.flex1}>
+              {left && (
+                <TouchableOpacity onPress={() => backPress()}>
+                  <Icon
+                    name={'arrow-back-circle-outline'}
+                    iconFamily={'Ionicons'}
+                    color={COLORS.white100}
+                    size={40}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            <View
+              style={[
+                {
+                  alignItems: chat ? 'flex-start' : 'center',
+                  flex: chat ? 5 : 2,
+                },
+              ]}>
+              <Typography
+                size={18}
                 color={COLORS.white100}
-                size={40}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        <View
-          style={[
-            {
-              alignItems: chat ? 'flex-start' : 'center',
-              flex: chat ? 5 : 2,
-            },
-          ]}>
-          <Typography
-            size={24}
-            color={COLORS.white100}
-            fFamily="bold"
-            textAlign="center">
-            {title}
-          </Typography>
-        </View>
+                fFamily="bold"
+                textAlign="center">
+                {title}
+              </Typography>
+            </View>
+          </>
+        )}
         <View style={[styles.flex1, {alignItems: 'flex-end'}]}>
           {search && (
             <IconButton
@@ -128,6 +153,12 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderRadius: 10,
+  },
+  profileWrapper: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 12,
   },
 });
 

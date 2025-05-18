@@ -2,7 +2,6 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 const userId = () => auth().currentUser?.uid;
-console.log(' NotesServices.js:5 ~ userId:', userId());
 
 export const addNote = async note => {
   try {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -31,13 +31,17 @@ import SlideInView from '../../animations/SlideView';
 // API SERVICE
 import validatoinSchema from '../../validations';
 import {setUser} from '../../redux/slices/appSlice';
+import {getUser} from '../../services/UserServices';
 
 const LoginScreen = ({navigation}) => {
   const inset = useSafeAreaInsets();
   const dispatch = useDispatch();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // API LOGIC
   const handleLogin = async values => {
+    setIsLoading(true);
     try {
       const userCredential = await auth().signInWithEmailAndPassword(
         values.email,
@@ -47,38 +51,33 @@ const LoginScreen = ({navigation}) => {
       const uid = userCredential.user.uid;
 
       // Fetch user details from Firestore
-      const userDoc = await firestore().collection('users').doc(uid).get();
+      const userSnapShot = await getUser();
+      console.log('🚀 ~ LoginScreen ~ userSnapShot:', userSnapShot);
 
-      if (!userDoc.exists) {
+      if (!userSnapShot) {
         showMessage({
           type: 'danger',
           message: 'User Not Found',
         });
+
+        return;
       }
 
-      const userData = userDoc.data();
-
       // Dispatch to Redux
-      dispatch(setUser({uid, ...userData?._data}));
+      dispatch(setUser(userSnapShot));
 
       // Show success message
       showMessage({
         type: 'success',
         message: 'Login Successfully!',
       });
-
-      // Reset navigation stack to MainStack
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'MainStack'}],
-        }),
-      );
     } catch (error) {
       showMessage({
         type: 'danger',
         message: error?.message || 'Login Failed!',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -157,8 +156,8 @@ const LoginScreen = ({navigation}) => {
                       <Button
                         label="Log In"
                         mT={20}
-                        // disabled={isLoading}
-                        // loader={isLoading}
+                        disabled={isLoading}
+                        loader={isLoading}
                         onPress={handleSubmit}
                       />
                     </>

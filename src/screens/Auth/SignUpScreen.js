@@ -102,10 +102,7 @@ const SignUpScreen = ({navigation}) => {
                     handleBlur,
                     setFieldValue,
                   } = props;
-                  console.log(
-                    ' SignUpScreen.js:193 ~ SignUpScreen ~ errors:',
-                    errors,
-                  );
+
                   return (
                     <>
                       <View style={styles.formContainer}>
