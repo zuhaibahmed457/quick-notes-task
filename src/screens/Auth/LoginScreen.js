@@ -103,8 +103,8 @@ const LoginScreen = ({navigation}) => {
               </Typography>
               <FormController
                 initialValues={{
-                  email: 'test@gmail.com',
-                  password: 'Admin@1234',
+                  email: __DEV__ ? 'test@gmail.com' : '',
+                  password: __DEV__ ? 'Admin@1234' : '',
                 }}
                 validationSchema={validatoinSchema.AuthValidations.SignInSchema}
                 onSubmit={handleLogin}>
