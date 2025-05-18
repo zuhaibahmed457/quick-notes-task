@@ -7,6 +7,7 @@ import {
   HomeScreen,
   AddNoteScreen,
   EditNoteScreen,
+  ChatScreen,
 } from '../screens';
 
 const Stack = createNativeStackNavigator();
@@ -35,6 +36,7 @@ const StackNavigator = () => {
       {/* MAIN STACK */}
       <Stack.Group screenOptions={screenOptions}>
         <Stack.Screen name="MainStack" component={HomeScreen} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
         <Stack.Screen name="AddNoteScreen" component={AddNoteScreen} />
         <Stack.Screen name="EditNoteScreen" component={EditNoteScreen} />
       </Stack.Group>

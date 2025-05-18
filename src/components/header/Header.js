@@ -30,7 +30,7 @@ const Header = ({
   const navigation = useNavigation();
   const {user} = useSelector(state => state.app);
   const handleLogout = async () => {
-    await userLogout();
+    await userLogout(navigation);
   };
   return (
     <View style={[styles.headerWrapper, bgColor && {backgroundColor: bgColor}]}>

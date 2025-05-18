@@ -8,6 +8,10 @@ import AuthHeader from './header/AuthHeader';
 // FORM CONTROLLER
 import FormController from './formController/FormController.js';
 
+// TAB VIEW
+import TabView from './tabView/TabView.js';
+import ReelItem from './reelItem/ReelItem.js';
+
 export {
   CustomSwitch,
   AuthHeader,
@@ -15,4 +19,6 @@ export {
   FormController,
   TextField,
   Button,
+  TabView,
+  ReelItem,
 };

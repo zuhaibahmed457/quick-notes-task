@@ -8,6 +8,7 @@ import SignUpScreen from './Auth/SignUpScreen';
 import HomeScreen from './Main/HomeScreen';
 import AddNoteScreen from './Main/AddNoteScreen';
 import EditNoteScreen from './Main/EditNoteScreen';
+import ChatScreen from './Main/ChatScreen';
 
 export {
   SplashScreen,
@@ -16,4 +17,5 @@ export {
   HomeScreen,
   AddNoteScreen,
   EditNoteScreen,
+  ChatScreen,
 };

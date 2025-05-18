@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -24,22 +24,25 @@ import {showMessage} from '../../utils';
 
 // API SERVICES
 import validatoinSchema from '../../validations';
+import {addUserToInboxes} from '../../services/UserServices';
 
 // SCHEMA
 const initialValues = {
-  first_name: '',
-  last_name: '',
-  email: '',
-  password: '',
-  password_confirmation: '',
+  first_name: 'John',
+  last_name: 'Doe',
+  email: 'test@gmail.com',
+  password: 'Admin@1234',
+  password_confirmation: 'Admin@1234',
 };
 
 const SignUpScreen = ({navigation}) => {
   const inset = useSafeAreaInsets();
+  const [isLoading, setIsLoading] = useState(false);
 
   // API LOGIC
 
   const handleRegister = async values => {
+    setIsLoading(true);
     const {email, password, first_name, last_name} = values;
     try {
       const userCredential = await auth().createUserWithEmailAndPassword(
@@ -65,6 +68,8 @@ const SignUpScreen = ({navigation}) => {
         type: 'danger',
         message: error?.message || 'Something went wrong!',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -162,8 +167,8 @@ const SignUpScreen = ({navigation}) => {
                         label="Sign Up"
                         mt={20}
                         onPress={handleSubmit}
-                        // disabled={isLoading}
-                        // loader={isLoading}
+                        disabled={isLoading}
+                        loader={isLoading}
                       />
                     </>
                   );

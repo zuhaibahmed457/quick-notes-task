@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import auth from '@react-native-firebase/auth';
-import {CommonActions} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 
 import {COLORS} from '../../globalStyle/Theme.js';
@@ -15,6 +15,7 @@ import Typography from '../../atomComponents/Typography.js';
 import {setUser} from '../../redux/slices/appSlice.js';
 import {getUser, userLogout} from '../../services/UserServices.js';
 import {showMessage} from '../../utils/index.js';
+import format from 'pretty-format';
 
 const SplashScreen = ({navigation}) => {
   const dispatch = useDispatch();
@@ -28,17 +29,12 @@ const SplashScreen = ({navigation}) => {
       const unsubscribe = auth().onAuthStateChanged(async user => {
         if (user?._user) {
           const userSnapShot = await getUser();
-
+          console.log('🚀 ~ unsubscribe ~ userSnapShot:', userSnapShot);
           if (!userSnapShot) {
-            showMessage({
-              type: 'danger',
-              message: 'User Not Found!',
-            });
             goToLogin();
             return;
           }
-
-          dispatch(setUser(userSnapShot));
+          dispatch(setUser({...userSnapShot, uid: user?._user?.uid}));
           navigation.dispatch(
             CommonActions.reset({
               index: 0,
@@ -54,12 +50,13 @@ const SplashScreen = ({navigation}) => {
       // Optionally clean up the listener
       return () => unsubscribe();
     } catch (error) {
+      console.log('🚀 ~ checkUser ~ error:', error);
       goToLogin();
     }
   };
 
   const goToLogin = async () => {
-    await userLogout();
+    // await userLogout(navigation);
     navigation.replace('LoginScreen');
   };
 

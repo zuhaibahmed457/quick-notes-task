@@ -48,7 +48,7 @@ const AddNoteScreen = ({navigation}) => {
         style={[
           GLOBALSTYLE.verticalSpace,
           {
-            flex: 0.5,
+            marginTop: 40,
             justifyContent: 'center',
           },
         ]}>

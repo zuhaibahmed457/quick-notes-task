@@ -76,3 +76,44 @@ export const maskDOB = input => {
 
   return formattedDOB;
 };
+
+export const formatFirebaseTimestamp = timestamp => {
+  if (!timestamp) return '';
+
+  const date = timestamp.toDate(); // Firebase Timestamp to JS Date
+  const now = new Date();
+
+  const isToday =
+    date.getDate() === now.getDate() &&
+    date.getMonth() === now.getMonth() &&
+    date.getFullYear() === now.getFullYear();
+
+  const yesterday = new Date();
+  yesterday.setDate(now.getDate() - 1);
+
+  const isYesterday =
+    date.getDate() === yesterday.getDate() &&
+    date.getMonth() === yesterday.getMonth() &&
+    date.getFullYear() === yesterday.getFullYear();
+
+  const timeString = date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  if (isToday) {
+    return `Today, ${timeString}`;
+  } else if (isYesterday) {
+    return `Yesterday, ${timeString}`;
+  } else {
+    const dateString = date.toLocaleDateString([], {
+      day: 'numeric',
+      month: 'short',
+    });
+    return `${dateString}, ${timeString}`;
+  }
+};
+
+export const generateChatId = (id1, id2) => {
+  return [id1, id2].sort().join('_'); // keeps it consistent
+};

@@ -52,9 +52,8 @@ const LoginScreen = ({navigation}) => {
 
       // Fetch user details from Firestore
       const userSnapShot = await getUser();
-      console.log('🚀 ~ LoginScreen ~ userSnapShot:', userSnapShot);
 
-      if (!userSnapShot) {
+      if (userSnapShot == null) {
         showMessage({
           type: 'danger',
           message: 'User Not Found',
@@ -63,8 +62,9 @@ const LoginScreen = ({navigation}) => {
         return;
       }
 
+      console.log('🚀 ~ LoginScreen ~ userSnapShot:', userSnapShot);
       // Dispatch to Redux
-      dispatch(setUser(userSnapShot));
+      dispatch(setUser({...userSnapShot, uid}));
 
       // Show success message
       showMessage({
@@ -103,8 +103,8 @@ const LoginScreen = ({navigation}) => {
               </Typography>
               <FormController
                 initialValues={{
-                  email: '',
-                  password: '',
+                  email: 'test@gmail.com',
+                  password: 'Admin@1234',
                 }}
                 validationSchema={validatoinSchema.AuthValidations.SignInSchema}
                 onSubmit={handleLogin}>

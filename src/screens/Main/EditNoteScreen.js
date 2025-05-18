@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {KeyboardAvoidingView, Platform, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
@@ -68,8 +68,7 @@ const EditNoteScreen = ({route, navigation}) => {
         style={[
           GLOBALSTYLE.verticalSpace,
           {
-            flex: 0.5,
-            justifyContent: 'center',
+            marginTop: 40,
           },
         ]}>
         <Typography size={20} fFamily="bold" mB={20}>
