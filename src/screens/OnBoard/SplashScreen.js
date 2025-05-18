@@ -13,7 +13,7 @@ import ScaledView from '../../animations/ScaledView';
 // API
 import Typography from '../../atomComponents/Typography.js';
 import {setUser} from '../../redux/slices/appSlice.js';
-import {getUser} from '../../services/UserServices.js';
+import {getUser, userLogout} from '../../services/UserServices.js';
 import {showMessage} from '../../utils/index.js';
 
 const SplashScreen = ({navigation}) => {
@@ -58,14 +58,9 @@ const SplashScreen = ({navigation}) => {
     }
   };
 
-  const goToLogin = () => {
+  const goToLogin = async () => {
+    await userLogout();
     navigation.replace('LoginScreen');
-    // navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 0,
-    //     routes: [{name: 'Login'}],
-    //   }),
-    // );
   };
 
   return (

@@ -25,3 +25,16 @@ export const getUser = async () => {
     console.log('🚀 ~ getUser ~ error:', error);
   }
 };
+
+export const userLogout = async () => {
+  try {
+    await auth().signOut();
+    navigation.replace('LoginScreen'); // replace ensures user can't go back
+  } catch (error) {
+    showMessage({
+      type: 'danger',
+      message: 'Something wrong in the code buddy!',
+    });
+    console.error('Error signing out: ', error);
+  }
+};

@@ -2,6 +2,8 @@ import React, {memo, useEffect} from 'react';
 import {View, StyleSheet, Platform, TouchableOpacity} from 'react-native';
 import {Avatar, IconButton} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 import {COLORS} from '../../globalStyle/Theme';
 
@@ -10,8 +12,7 @@ import Flex from '../../atomComponents/Flex';
 
 import Sizer from '../../helpers/Sizer';
 import Icon from '../../helpers/Icon';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {userLogout} from '../../services/UserServices';
 
 const Header = ({
   title = '',
@@ -29,12 +30,7 @@ const Header = ({
   const navigation = useNavigation();
   const {user} = useSelector(state => state.app);
   const handleLogout = async () => {
-    try {
-      await auth().signOut();
-      navigation.replace('LoginScreen'); // replace ensures user can't go back
-    } catch (error) {
-      console.error('Error signing out: ', error);
-    }
+    await userLogout();
   };
   return (
     <View style={[styles.headerWrapper, bgColor && {backgroundColor: bgColor}]}>
