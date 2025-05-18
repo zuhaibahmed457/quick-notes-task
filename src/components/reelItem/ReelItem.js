@@ -21,6 +21,11 @@ const ReelItem = ({item, isActive, reelHeight}) => {
     if (videoRef.current) {
       videoRef.current.seek(0);
     }
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.seek(0);
+      }
+    };
   }, [shouldPlay]);
 
   return (

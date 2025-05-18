@@ -1,5 +1,5 @@
 import {Alert, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -12,7 +12,9 @@ import {showMessage} from 'react-native-flash-message';
 import {addNote} from '../../services/NotesServices';
 
 const AddNoteScreen = ({navigation}) => {
+  const [isLoading, setIsLoading] = useState(false);
   const handleAddNote = async (values, {resetForm}) => {
+    setIsLoading(false);
     try {
       setTimeout(() => {
         showMessage({
@@ -32,6 +34,8 @@ const AddNoteScreen = ({navigation}) => {
         type: 'success',
         message: error?.message || 'Something wrong!',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,7 +86,13 @@ const AddNoteScreen = ({navigation}) => {
                   error={touched.content && errors.content}
                 />
               </View>
-              <Button label="Save Note" onPress={handleSubmit} mT={20} />
+              <Button
+                label="Save Note"
+                onPress={handleSubmit}
+                mT={20}
+                isLoading={isLoading}
+                disabled={isLoading}
+              />
             </>
           )}
         </Formik>

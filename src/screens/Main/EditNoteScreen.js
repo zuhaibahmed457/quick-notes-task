@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {KeyboardAvoidingView, Platform, View} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -12,6 +12,7 @@ import {COLORS, GLOBALSTYLE} from '../../globalStyle/Theme';
 
 const EditNoteScreen = ({route, navigation}) => {
   const {note} = route.params;
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdate = async (values, {resetForm}) => {
     try {
@@ -101,7 +102,13 @@ const EditNoteScreen = ({route, navigation}) => {
                   error={touched.content && errors.content}
                 />
               </View>
-              <Button label="Update Note" onPress={handleSubmit} mT={20} />
+              <Button
+                label="Update Note"
+                onPress={handleSubmit}
+                mT={20}
+                isLoading={isLoading}
+                disabled={isLoading}
+              />
               <Button
                 label="Delete Note"
                 onPress={handleDelete}

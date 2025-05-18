@@ -22,11 +22,6 @@ import format from 'pretty-format';
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
 const HomeScreen = ({navigation}) => {
-  const [reelContentHeight, setReelContentHeight] = useState({
-    tab: 0,
-    header: 0,
-  });
-
   const tabs = [
     {label: 'Chats', value: 0},
     {label: 'Reels', value: 1},
@@ -35,17 +30,9 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <Container>
-      <View
-        onLayout={e => {
-          setReelContentHeight(prev => ({
-            ...prev,
-            header: e.nativeEvent.layout.height,
-          }));
-        }}>
-        <SlideInView slide="up">
-          <Header home backgroundColor={COLORS.primary} left={false} logout />
-        </SlideInView>
-      </View>
+      <SlideInView slide="up">
+        <Header home backgroundColor={COLORS.primary} left={false} logout />
+      </SlideInView>
 
       <TabView tabs={tabs}>
         <SlideInView slide="left">
@@ -217,7 +204,7 @@ const NotesList = ({}) => {
 
   useEffect(() => {
     loadNotes();
-  }, []);
+  }, [isFocused]);
 
   const loadNotes = async () => {
     await getNotes(setNotes, setLoading);
